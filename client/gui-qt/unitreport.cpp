@@ -148,7 +148,6 @@ unittype_item::unittype_item(QWidget *parent, struct unit_type *ut)
     : QFrame(parent)
 {
   int isize;
-  QFont f;
   QFontMetrics *fm;
   QHBoxLayout *hbox;
   QHBoxLayout *hbox_top;
@@ -163,14 +162,14 @@ unittype_item::unittype_item(QWidget *parent, struct unit_type *ut)
   QSpacerItem *spacer;
   QVBoxLayout *vbox;
   QVBoxLayout *vbox_main;
-  QPixmap *spr;
+  const QPixmap *spr;
 
   setParent(parent);
   utype = ut;
   init_img();
   unit_scroll = 0;
   setSizePolicy(size_fixed_policy);
-  f = *fcFont::instance()->getFont(fonts::default_font);
+  auto f = fcFont::instance()->getFont(fonts::default_font);
   fm = new QFontMetrics(f);
   isize = fm->height() * 2 / 3;
   vbox_main = new QVBoxLayout();
@@ -238,9 +237,7 @@ unittype_item::~unittype_item() = default;
  */
 void unittype_item::init_img()
 {
-  QPixmap *sp;
-
-  sp = get_unittype_sprite(get_tileset(), utype, direction8_invalid());
+  auto sp = get_unittype_sprite(get_tileset(), utype, direction8_invalid());
   label_pix.setPixmap(*sp);
 }
 

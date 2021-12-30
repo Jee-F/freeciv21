@@ -8,8 +8,31 @@ Freeciv21 has a number of prerequisites.  Note, that apart from the first prereq
 configuration process is smart enough to work out whether your system is suitable. If in doubt, just try it.
 
 An operating system that support Qt
-    Any modern operating system that support Qt is required. As of this writing this is Linux, Microsoft
-    Windows\ |reg| and Apple Mac OS X\ |reg|. On Windows Msys2 is supported.
+    Any modern operating system that supports Qt 5.12+ is required. As of this writing this is Linux, Microsoft
+    Windows\ |reg| and Apple Mac OS X\ |reg|. On Windows MSYS2 (MingW) is required.
+
+    Linux Distributions:
+
+    * Arch
+    * CentOS 8+
+    * Debian 11+ (Bullseye)
+    * Fedora 28+
+    * Gentoo
+    * KDE Neon
+    * Manjaro
+    * Mint 20+ or Mint Debian Edition
+    * openSUSE 15.2+
+    * Slackware
+    * Ubuntu 20.04 LTS+
+
+
+.. note::
+  The above list of Linux distributions is, of course, not exhaustive. The Freeciv21 Community has simply
+  listed the mainline, well supported, distributions here. The code repository has Continuous Integration
+  enabled and all code commits pass through Ubuntu, Mac OS and Windows for testing. It is assummed that the
+  user is keeping his/her computer OS up to date. Support by the community for these distributions will be
+  better than for some of the others out there, so keep that in mind if you are not an experienced Linux user.
+
 
 A C and C++ compiler
     Freeciv21 is written in very portable C and C++. Both 32- and 64-bit machines are supported. You cannot

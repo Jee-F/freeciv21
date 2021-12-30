@@ -222,15 +222,14 @@ void gov_menu::create()
 void gov_menu::update()
 {
   struct government *gov, *revol_gov;
-  QPixmap *sprite;
 
   revol_gov = game.government_during_revolution;
   for (int i = 0, j = 0; i < actions.count(); ++i) {
     gov = government_by_number(i);
     if (gov != revol_gov) { // Skip revolution goverment
-      sprite = get_government_sprite(tileset, gov);
+      auto sprite = get_government_sprite(tileset, gov);
       if (sprite != NULL) {
-        actions[j + 1]->setIcon(QIcon(*(sprite)));
+        actions[j + 1]->setIcon(QIcon(*sprite));
       }
       actions[j + 1]->setEnabled(
           can_change_to_government(client.conn.playing, gov));
@@ -2602,13 +2601,7 @@ void mr_menu::zoom_in()
  */
 void mr_menu::zoom_reset()
 {
-  QFont *qf;
-
   king()->map_scale = 1.0f;
-  qf = fcFont::instance()->getFont(fonts::city_names);
-  qf->setPointSize(fcFont::instance()->city_fontsize);
-  qf = fcFont::instance()->getFont(fonts::city_productions);
-  qf->setPointSize(fcFont::instance()->prod_fontsize);
   tilespec_reread(tileset_basename(tileset), true, king()->map_scale);
 }
 
@@ -2617,17 +2610,7 @@ void mr_menu::zoom_reset()
  */
 void mr_menu::zoom_scale_fonts()
 {
-  QFont *qf;
-
-  if (scale_fonts_status->isChecked()) {
-    gui_options.zoom_scale_fonts = true;
-  } else {
-    qf = fcFont::instance()->getFont(fonts::city_names);
-    qf->setPointSize(fcFont::instance()->city_fontsize);
-    qf = fcFont::instance()->getFont(fonts::city_productions);
-    qf->setPointSize(fcFont::instance()->prod_fontsize);
-    gui_options.zoom_scale_fonts = false;
-  }
+  gui_options.zoom_scale_fonts = scale_fonts_status->isChecked();
   update_city_descriptions();
 }
 

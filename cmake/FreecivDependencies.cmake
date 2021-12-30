@@ -1,4 +1,5 @@
 include(CheckCSourceCompiles)
+include(CheckSymbolExists)
 include(CheckIncludeFile)
 include(CheckFunctionExists)
 include(CheckTypeSize)
@@ -23,7 +24,10 @@ find_package(PythonInterp 3 REQUIRED)
 find_package(Qt5 5.10 COMPONENTS Core Network REQUIRED)
 
 # Required for utility
-find_package(Readline REQUIRED)
+if(FREECIV_ENABLE_SERVER)
+  find_package(Readline REQUIRED)
+  check_symbol_exists(rl_completion_suppress_append "readline/readline.h" HAVE_SUPPRESS_APPEND)
+endif()
 
 # Internationalization
 add_custom_target(freeciv_translations)
@@ -88,14 +92,16 @@ endif()
 find_package(Lua 5.3 REQUIRED)
 
 # Create an imported target since it's not created by CMake :(
-add_library(lua UNKNOWN IMPORTED GLOBAL)
 # Get a library name for IMPORTED_LOCATION
-list(GET LUA_LIBRARIES 0 loc)
-set_target_properties(lua PROPERTIES
-  IMPORTED_LOCATION "${loc}"
-  INTERFACE_INCLUDE_DIRECTORIES "${LUA_INCLUDE_DIR}")
-# Link to all libs, not just the first
-target_link_libraries(lua INTERFACE "${LUA_LIBRARIES}")
+if (NOT EMSCRIPTEN AND NOT APPLE)
+  add_library(lua UNKNOWN IMPORTED GLOBAL)
+  list(GET LUA_LIBRARIES 0 loc)
+  set_target_properties(lua PROPERTIES
+    IMPORTED_LOCATION "${loc}"
+    INTERFACE_INCLUDE_DIRECTORIES "${LUA_INCLUDE_DIR}")
+  # Link to all libs, not just the first
+  target_link_libraries(lua INTERFACE "${LUA_LIBRARIES}")
+endif()
 
 if (CMAKE_CROSSCOMPILING AND NOT CMAKE_CROSSCOMPILING_EMULATOR)
   find_package(ToLuaProgram REQUIRED)
@@ -103,6 +109,7 @@ else()
   find_package(ToLuaProgram)
 endif()
 add_subdirectory(dependencies/tolua-5.2) # Will build the program if not found.
+add_subdirectory(dependencies/sol2)
 
 # backward-cpp
 include(FreecivBackward)
